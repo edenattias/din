@@ -1,4 +1,5 @@
 import {
+  BelongsToMany,
   Column,
   CreatedAt,
   DataType,
@@ -9,6 +10,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { IProductModel } from '../../utils/interfaces/product.interface';
+import { UsersModel } from './users.model';
 
 @Table({
   tableName: 'products',
@@ -40,4 +42,13 @@ export class ProductsModel
   @UpdatedAt
   @Column({ defaultValue: Sequelize.literal('now()'), allowNull: false })
   updatedAt!: Date;
+
+  @BelongsToMany(() => UsersModel, {
+    through: 'user_related_products',
+    as: 'users',
+    foreignKey: 'productId',
+    otherKey: 'userId',
+    onDelete: 'CASCADE',
+  })
+  users?: UsersModel[];
 }

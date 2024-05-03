@@ -2,12 +2,12 @@ version: '3.9'
 services:
   postgres:
     image: postgres:15.2
-    container_name: oou-postgres
+    container_name: letstok-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: vbQRiqt53HYJrBfd0LPT
-      POSTGRES_DB: oou
+      POSTGRES_DB: letstok
     ports:
       - "5432:5432"
     volumes:
