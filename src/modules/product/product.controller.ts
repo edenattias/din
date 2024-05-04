@@ -9,7 +9,6 @@ import {
   Logger,
   Delete,
   Param,
-  ParseUUIDPipe,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -49,7 +48,7 @@ export class ProductController {
   @HttpCode(HttpStatus.OK)
   @Delete()
   public async delete(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id') id: string,
     @Res() res: Response,
   ) {
     this.logger.log(`${LOGGER_PATTERN} - DELETE :: START`, id);

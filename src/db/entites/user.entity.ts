@@ -26,16 +26,12 @@ export class UserEntity {
     return selectedUser.$add('products', [selectedProduct]);
   }
 
-  public async removeProduct(
-    userId: string,
-    productId: string,
-  ): Promise<unknown> {
+  public async removeProduct(userId: string, productId: string): Promise<void> {
     const [selectedUser, selectedProduct] = await Promise.all([
       UsersModel.findByPk(userId),
       ProductsModel.findByPk(productId),
     ]);
-
-    return selectedUser.$remove('products', [selectedProduct]);
+    await selectedUser.$remove('products', selectedProduct);;
   }
 
   public async findUserByEmail(email: string): Promise<UsersModel> {

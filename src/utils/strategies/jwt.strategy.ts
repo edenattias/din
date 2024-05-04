@@ -25,7 +25,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   private static extractJWTFromCookie(req: Request): string {
-    return (req?.headers?.[AUTH_HEADER] || req?.headers?.[AUTH_HEADER.toLowerCase()]) as string;
+    return (req?.headers?.[AUTH_HEADER] ||
+      req?.headers?.[AUTH_HEADER.toLowerCase()]) as string;
   }
 
   public async validate(payload: {

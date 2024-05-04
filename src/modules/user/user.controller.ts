@@ -9,7 +9,6 @@ import {
   UseGuards,
   Req,
   Param,
-  ParseUUIDPipe,
   Delete,
   Get,
 } from '@nestjs/common';
@@ -38,9 +37,12 @@ export class UserController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/products')
-  public async getUserProducts(@Req() req: Request, @Res() res: Response) {
-    const { id: userId } = req.user as { id: string };
+  @Get('/:id/products')
+  public async getUserProducts(
+    @Req() req: Request,
+    @Param('id') userId: string,
+    @Res() res: Response,
+  ) {
     this.logger.log(`${LOGGER_PATTERN} - USER-PRODUCTS :: START`, {
       userId,
     });
@@ -50,13 +52,13 @@ export class UserController {
   }
 
   @HttpCode(HttpStatus.CREATED)
-  @Put('/:id')
+  @Put('/:id/products/:productId')
   public async addProduct(
     @Req() req: Request,
-    @Param('id') productId: string,
+    @Param('id') userId: string,
+    @Param('productId') productId: string,
     @Res() res: Response,
   ) {
-    const { id: userId } = req.user as { id: string };
     this.logger.log(`${LOGGER_PATTERN} - ADD-PRODUCT :: START`, {
       userId,
       productId,
@@ -67,22 +69,22 @@ export class UserController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Delete('/:id')
+  @Delete('/:id/products/:productId')
   public async removeProduct(
     @Req() req: Request,
-    @Param('id', ParseUUIDPipe) productId: string,
+    @Param('id') userId: string,
+    @Param('productId') productId: string,
     @Res() res: Response,
   ) {
-    const { id: userId } = req.user as { id: string };
     this.logger.log(`${LOGGER_PATTERN} - REMOVE-PRODUCT :: START`, {
       userId,
       productId,
     });
-    const response = await this.userService.removeProduct({
+    await this.userService.removeProduct({
       userId,
       productId,
     });
-    this.logger.log(`${LOGGER_PATTERN} - REMOVE-PRODUCT :: END`, response);
-    return res.status(HttpStatus.CREATED).send(response);
+    this.logger.log(`${LOGGER_PATTERN} - REMOVE-PRODUCT :: END`);
+    return res.status(HttpStatus.CREATED).send({ message: 'Product removed' });
   }
 }

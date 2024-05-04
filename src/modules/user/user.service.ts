@@ -41,14 +41,14 @@ export class UserService {
   public async removeProduct(body: {
     userId: string;
     productId: string;
-  }): Promise<unknown> {
+  }): Promise<void> {
     const { userId, productId } = body;
     const userProductIds: string[] = await this.getUserProductIds(userId);
 
-    if (userProductIds.includes(productId)) {
+    if (!userProductIds.includes(productId)) {
       throw new Error('Product does not exist');
     }
 
-    return this.DAL.User.removeProduct(userId, productId);
+    await this.DAL.User.removeProduct(userId, productId);
   }
 }
